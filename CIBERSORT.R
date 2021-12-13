@@ -1,7 +1,7 @@
 
 library(openxlsx)
 
-cibersort <- read.delim("CIBERSORT.Output_Job20.txt", sep = "\t", header = T, check.names = F, stringsAsFactors = F)
+cibersort <- read.delim("CIBERSORT.Output_Job18.txt", sep = "\t", header = T, check.names = F, stringsAsFactors = F)
 
 pData <- read.xlsx("OV_immune_ntp.xlsx", sheet = 1)
 
@@ -30,7 +30,7 @@ p <- ggboxplot(
   fill = "CellType",
   xlab = "",
   ylab = "Cell composition",
-  main = "TME Cell composition of GEO"
+  main = "TME Cell composition of TCGA"
 ) +
   theme(axis.text.x = element_text(
     angle = 45,
@@ -49,7 +49,7 @@ q <- ggboxplot(
   fill = "Group",
   xlab = "",
   ylab = "Cell composition",
-  main = "TME Cell composition group by Immune Group of GEO OV",
+  main = "TME Cell composition group by Immune Group of TCGA OV",
   palette = c("lightgrey", "#ED0000FF", "#42B540FF"),
   outlier.shape = 20
 ) +
@@ -72,7 +72,7 @@ p2 <- ggboxplot(
   fill = "CellType",
   xlab = "",
   ylab = "Cell composition",
-  main = "TME Cell composition of GEO"
+  main = "TME Cell composition of TCGA"
 ) +
   theme(axis.text.x = element_text(
     angle = 45,
@@ -86,7 +86,7 @@ dev.off()
 library(ggplot2)
 library(ggpubr)
 
-genesel <- "T cells CD4 memory resting"
+genesel <- "Macrophages M0"
 
 my_comparisons <- list(c("0", "1"),
                        c("0", "2"),
@@ -140,13 +140,14 @@ annotation$group <- as.factor(annotation$group)
 
 annotation_col <- list(membership = c("1"="purple", "2"="lightgrey"),
                        predict.label = c("0"="lightgrey", "1"="#ED0000FF", "2" = "#42B540FF"),
-                       group = c("2"="#00468BFF","1"="#ED0000FF","3"="#42B540FF","4"="#0099B4FF"))
+                       group = c("1"="#00468BFF","2"="#ED0000FF","3"="#42B540FF","4"="#0099B4FF"))
 
 plot <- as.data.frame(immune.heatmap[,c(1:23)])
 rownames(plot) <- plot[,1]
 plot <- plot[,-1]
 
 table(as.factor(tmp[,"predict.label"]))
+table(as.factor(tmp[,"membership"]))
 
 pdf(file = "OV_immune.pdf", width = 12, height = 12)
 pheatmap((t(plot)), 
@@ -157,7 +158,7 @@ pheatmap((t(plot)),
          annotation_col = annotation, 
          annotation_colors = annotation_col,
          cellheight = 12, annotation_legend = T,
-         gaps_col = c(92, 170),
+         gaps_col = c(121, 244),
          color = colorRampPalette(c("white", "pink", "red"))(60))
 dev.off()
 
